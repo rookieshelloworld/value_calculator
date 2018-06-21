@@ -8,7 +8,7 @@ import java.util.Map;
 public class AssetValueCalculatorTest {
 
     //years of investment
-    Double years = 15.0;
+    Double years = 25.0;
 
     //Real Estate parameters
     Double currentAssetValue = 300000.0;
@@ -20,7 +20,7 @@ public class AssetValueCalculatorTest {
     Double others = 0.0;
 
     //Non-Real estate investments
-    Double rateOfInterest = 15.0;
+    Double rateOfInterest = 20.0;
     Double rent = 1469.0;
     Double monthlyBillForRentedHouse = 250.0;
     Double rentAmountWithBills = rent + monthlyBillForRentedHouse;
@@ -42,14 +42,17 @@ public class AssetValueCalculatorTest {
 
     @Test
     public void shouldCalculateTotalRentPaid() {
-        System.out.println("total rent paid : " +
-                AssetValueCalculator.calculateRentPaidValue(rentAmountWithBills, annualRiseOfRent, years));
+        Double investments = InterestCalculator.calculateCompoundInterest(downPayment, rateOfInterest, years, false);
+        Double rentPaid = AssetValueCalculator.calculateRentPaidValue(rentAmountWithBills, annualRiseOfRent, 10.0);
+        Double nonRealEstateValue = investments - rentPaid;
+        System.out.println("Non-real estate value : " +
+                nonRealEstateValue);
     }
 
     @Test
     public void calculateLoanRepaidToBankWithInterest() {
         System.out.println("Amount repaid to bank with interest " + AssetValueCalculator.calculateLoanRepaidToBank
-                (currentAssetValue, bankInterestRate, years));
+                (currentAssetValue - downPayment, currentAssetValue, bankInterestRate, years, houseValueAppreciationPercentage));
     }
 
     @Test
@@ -70,7 +73,7 @@ public class AssetValueCalculatorTest {
         Double rentPaid = AssetValueCalculator.calculateRentPaidValue(rentAmountWithBills, annualRiseOfRent, years);
         Double nonRealEstateValue = investments - rentPaid;
 
-        Map<String, List<Double>> map = InterestCalculator.calculateTaxPaidDetails((currentAssetValue - downPayment), bankInterestRate, years);
+        Map<String, List<Double>> map = InterestCalculator.calculateTaxPaidDetails((currentAssetValue - downPayment), currentAssetValue, bankInterestRate, years, houseValueAppreciationPercentage);
         Double monthlyInstallment = map.get("monthly_installment").get(0);
 
         String amount = AssetValueCalculator.calculateInvestmentOverEMIAndRentDifference(monthlyInstallment, rent,
@@ -96,8 +99,8 @@ public class AssetValueCalculatorTest {
     }
 
     @Test
-    public void calculateCompoundInterest(){
-        System.out.println("Compound interest : " + InterestCalculator.calculateCompoundInterest(391405.0, 16.0, 10.0, false ));
+    public void calculateCompoundInterest() {
+        System.out.println("Compound interest : " + InterestCalculator.calculateCompoundInterest(391405.0, 16.0, 10.0, false));
     }
 
 

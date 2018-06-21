@@ -35,7 +35,7 @@ public class InterestCalculatorTest {
         //https://smartasset.com/taxes/hennepin-county-minnesota-property-tax-calculator#rq4YJnYP9w
         //https://www.calculators.org/home/tax-savings.php
         Map<String, List<Double>> taxMap = InterestCalculator.calculateTaxPaidDetails
-                (268000.0, 3.2, 30.0);
+                (268000.0, 300000.0, 3.2, 30.0, 5.0);
 
         assertTrue(1159.0111987659257 == taxMap.get("monthly_installment").get(0));
         assertTrue(149244.03155572218 == taxMap.get("total_interest").get(0));

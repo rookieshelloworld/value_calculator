@@ -15,7 +15,7 @@ public class AssetValueCalculator {
 
         Double totalPropertyTaxPaid = annualPropertyTaxPaidList.get(annualPropertyTaxPaidList.size() - 1);
         Double totalBillsPaid = monthlyBills * 12 * years;
-        Map<String, List<Double>> map = InterestCalculator.calculateTaxPaidDetails((currentAssetValue - downPayment), bankInterest, years);
+        Map<String, List<Double>> map = InterestCalculator.calculateTaxPaidDetails((currentAssetValue - downPayment), currentAssetValue, bankInterest, years, appreciationPercentage);
         Double totalEMIWithInterestPaidToBank = getTotalEMIWithInterestPaidToBankPropertyTaxIncluded(years, map.get("monthly_installment").get(0),
                 annualPropertyTaxPaidList);
 
@@ -122,7 +122,7 @@ public class AssetValueCalculator {
                 appreciationPercentage, years);
         Double propertyTaxPaid = propertyTaxPaidList.get(propertyTaxPaidList.size() - 1);
         Double totalBillsPaid = monthlyBills * 12 * years;
-        Map<String, List<Double>> map = InterestCalculator.calculateTaxPaidDetails((currentAssetValue - downPayment), bankInterest, years);
+        Map<String, List<Double>> map = InterestCalculator.calculateTaxPaidDetails((currentAssetValue - downPayment), currentAssetValue, bankInterest, years, appreciationPercentage);
         Double baseMonthLyInstallment = map.get("monthly_installment").get(0);
         Double totalEMIWithInterestPaidToBank = getTotalEMIWithInterestPaidToBankPropertyTaxIncluded(years, baseMonthLyInstallment,
                 propertyTaxPaidList);
@@ -161,8 +161,8 @@ public class AssetValueCalculator {
 
     }
 
-    public static double calculateLoanRepaidToBank(Double investmentAmount, Double roi, Double years) {
-        Map<String, List<Double>> map = InterestCalculator.calculateTaxPaidDetails(investmentAmount, roi, years);
+    public static double calculateLoanRepaidToBank(Double borrowedAmount, Double assetValue, Double roi, Double years, Double houseValueAppreciationPercentage) {
+        Map<String, List<Double>> map = InterestCalculator.calculateTaxPaidDetails(borrowedAmount, assetValue, roi, years, houseValueAppreciationPercentage);
         return map.get("monthly_installment").get(0) * 12 * years;
 
     }

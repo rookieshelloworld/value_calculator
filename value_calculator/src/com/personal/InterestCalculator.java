@@ -35,10 +35,12 @@ public class InterestCalculator {
         return totalMaturity;
     }
 
-    public static Map calculateTaxPaidDetails(Double borrowedMoney, Double roi, Double years) {
+    public static Map calculateTaxPaidDetails(Double borrowedMoney, Double initialAssetMoney, Double roi, Double years, Double appreciationPercentage) {
         //https://emicalculator.net/
         //https://mozo.com.au/interest-rates/guides/calculate-interest-on-loan
         //https://www.calcxml.com/do/hom09?skn=#results
+
+        Double currentAssetValue = initialAssetMoney;
         Double J = (roi / 100) / 12;
         Double N = 12 * years;
 
@@ -71,7 +73,10 @@ public class InterestCalculator {
                     System.out.println("\nAfter " + (month + 1) / 12 + " years\n***************************");
                 else System.out.println("\nAfter " + month / 12 + " years\n***************************");
 
+                currentAssetValue = currentAssetValue + ((appreciationPercentage / 100) * currentAssetValue);
 
+                System.out.println("House Value: " + currentAssetValue);
+                System.out.println("Net House Value : " + (currentAssetValue - totalInterestPaid - remainingPrincipal - (initialAssetMoney - borrowedMoney)));
                 System.out.println("Interest paid: " + totalInterestPaid);
                 System.out.println("Principal remaining  : " + remainingPrincipal);
                 System.out.println("Principal paid  : " + (borrowedMoney - remainingPrincipal));
